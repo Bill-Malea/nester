@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "232463404838",
+    "project_id": "nester-d3198",
+    "storage_bucket": "nester-d3198.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232463404838:android:2ae1681f7bb75c34f0bbe7",
+        "android_client_info": {
+          "package_name": "com.example.nester"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232463404838-20tdae8eprpc6e1b5pk9t8a3c9jt77ab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEJleOdcb4i1nQbP9gh_OcS_bFeoS6d-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232463404838-20tdae8eprpc6e1b5pk9t8a3c9jt77ab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
