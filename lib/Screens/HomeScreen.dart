@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nester/Screens/AttendancePage.dart';
 import 'package:nester/Screens/EmployeDetails.dart';
+import 'package:nester/Screens/LeavePage.dart';
 import 'package:nester/Screens/ResignPage.dart';
+import 'package:nester/Screens/VoiceGrievance.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
   final List<String> _items = [
-    'Employ Details',
+    'Employee Details',
     'Attendance',
     'Leave',
     'Voice Grievance',
@@ -48,16 +50,23 @@ class HomeScreen extends StatelessWidget {
                 break;
               case 2:
                 // Navigate to Leave page
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => LeavePage()));
                 break;
+
               case 3:
-                // Navigate to TeamChat page
+                // Navigate to VoiceGrievance page
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            VoiceGrievancePage()));
                 break;
               case 4:
-                // Navigate to VoiceGrievance page
-                break;
-              case 5:
                 // Navigate to Resign page
-                 Navigator.push(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) => const ResignPage()));

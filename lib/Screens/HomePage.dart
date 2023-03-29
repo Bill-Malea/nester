@@ -3,8 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../Model/model.dart';
 import '../providers/BottomNavProvider.dart';
+import 'AttendanceGraph.dart';
 import 'HomeScreen.dart';
+import 'LeavesList.dart';
+import 'ResignationStatus.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -26,7 +30,12 @@ class _MyHomePageState extends State<MyHomePage> {
     Icons.book_online_sharp,
   ];
 
-  final List<Widget> _pages = <Widget>[HomeScreen()];
+  final List<Widget> _pages = <Widget>[
+    HomeScreen(),
+    const LeavesPage(),
+    AttendanceGraph(),
+    ResignationPage(),
+  ];
   @override
   Widget build(BuildContext context) {
     var selectedIndex = Provider.of<BottomNavProvider>(context).selectetab;
@@ -47,8 +56,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ))
         ],
       ),
-      body: SingleChildScrollView(
-        child: _pages.elementAt(selectedIndex),
+      body: Center(
+        child: SingleChildScrollView(
+          child: _pages.elementAt(selectedIndex),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.secondary,

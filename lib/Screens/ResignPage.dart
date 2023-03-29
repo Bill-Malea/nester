@@ -7,6 +7,7 @@ class ResignPage extends StatefulWidget {
   const ResignPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ResignPageState createState() => _ResignPageState();
 }
 
@@ -48,7 +49,7 @@ class _ResignPageState extends State<ResignPage> {
                 return null;
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
                 final reason = _reasonController.text.trim();
@@ -57,7 +58,7 @@ class _ResignPageState extends State<ResignPage> {
                   try {
                     await resignService.submitResignation(reason);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                         content: Text('Resignation submitted successfully!'),
                         backgroundColor: Colors.green,
                       ),
@@ -73,7 +74,7 @@ class _ResignPageState extends State<ResignPage> {
                   }
                 }
               },
-              child: Text('Submit Resignation'),
+              child: const Text('Submit Resignation'),
             ),
           ],
         ),

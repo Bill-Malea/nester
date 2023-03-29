@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../Model/model.dart';
+
 class AttendanceService extends ChangeNotifier {
   List<DateTime> _checkIns = [];
   List<DateTime> _checkOuts = [];
@@ -37,6 +39,17 @@ class AttendanceService extends ChangeNotifier {
     final response = await http.post(Uri.parse(apiUrl), body: body);
     if (response.statusCode != 200) {
       throw Exception('Failed to check out.');
+    }
+  }
+
+  Future<List<AttendanceData>> fetchAttendance() async {
+    final response =
+        await http.get(Uri.parse('https://example.com/api/attendance'));
+    if (response.statusCode == 200) {
+      final jsonList = jsonDecode(response.body) as List<dynamic>;
+      return jsonList.map((json) => AttendanceData.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to fetch attendance');
     }
   }
 }

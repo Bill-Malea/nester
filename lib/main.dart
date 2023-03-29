@@ -6,6 +6,8 @@ import 'package:nester/login.dart';
 import 'package:nester/providers/AttendenceProvider.dart';
 import 'package:nester/providers/BottomNavProvider.dart';
 import 'package:nester/providers/EmployeProvider.dart';
+import 'package:nester/providers/GrievanceService.dart';
+import 'package:nester/providers/LeaveService.dart';
 import 'package:nester/providers/ResignProvider.dart';
 import 'package:provider/provider.dart';
 
@@ -28,10 +30,17 @@ void main() async {
       ChangeNotifierProvider(
         create: (context) => AttendanceService(),
       ),
-       ChangeNotifierProvider(
+      ChangeNotifierProvider(
         create: (context) => AttendanceService(),
-      ), ChangeNotifierProvider(
+      ),
+      ChangeNotifierProvider(
         create: (context) => ResignService(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => LeaveService(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => GrievanceService(),
       ),
     ],
     child: const MyApp(),

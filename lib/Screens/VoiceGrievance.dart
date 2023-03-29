@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:record/record.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/GrievanceService.dart';
 
 class VoiceGrievancePage extends StatefulWidget {
   @override
@@ -11,63 +9,44 @@ class VoiceGrievancePage extends StatefulWidget {
 }
 
 class _VoiceGrievancePageState extends State<VoiceGrievancePage> {
-  String _grievance = '';
-  String _voiceFilePath = '';
-  bool _isRecording = false;
-  var record = Record();
-  void _startRecording() async {
-    bool hasPermission = await _getPermission();
-    if (hasPermission) {
-      setState(() {
-        _isRecording = true;
-      });
+  final _formKey = GlobalKey<FormState>();
+  var _title = '';
+  var _department = '';
+  var _text = '';
 
-      final dir = await getApplicationDocumentsDirectory();
-      final filePath = '${dir.path}/voice_grievance.wav';
-
-      await record.start(path: filePath);
-
-      setState(() {
-        _voiceFilePath = filePath;
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please grant microphone permission.'),
-        ),
-      );
-    }
-  }
-
-  void _stopRecording() async {
-    setState(() {
-      _isRecording = false;
-    });
-
-    await record.stop();
-
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Voice recording saved.'),
-      ),
-    );
-  }
-
-  Future<bool> _getPermission() async {
-    PermissionStatus status = await Permission.microphone.request();
-
-    if (status == PermissionStatus.granted) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  bool _isLoading = false;
 
   Future<void> _submitGrievance() async {
-    // Implement the logic to send the user's grievance and the recorded voice file to the server using an API request
-    // Use the _grievance and _voiceFilePath variables to get the data to send to the server
-    // Use an API service to upload the recorded voice file to the server
+    final form = _formKey.currentState;
+
+    if (form!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      form.save();
+
+      try {
+        await Provider.of<GrievanceService>(context, listen: false)
+            .submitGrievance(
+          title: _title,
+          department: _department,
+          description: _text,
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Grievance submitted successfully'),
+        ));
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Error submitting grievance'),
+        ));
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -79,38 +58,61 @@ class _VoiceGrievancePageState extends State<VoiceGrievancePage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Enter your grievance',
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Title'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a title';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _title = value!;
+                  },
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    _grievance = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: _isRecording ? _stopRecording : _startRecording,
-                    child: Icon(
-                      _isRecording ? Icons.stop : Icons.mic,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: _submitGrievance,
-                    child: const Text('Submit Grievance'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16.0),
-              Text(_voiceFilePath),
-            ],
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Department'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter a department';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _department = value!;
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Grievance'),
+                  maxLines: 5,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter your grievance';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _text = value!;
+                  },
+                ),
+                SizedBox(height: 16.0),
+                _isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ElevatedButton(
+                        onPressed: _submitGrievance,
+                        child: Text('Submit Grievance'),
+                      ),
+              ],
+            ),
           ),
         ),
       ),

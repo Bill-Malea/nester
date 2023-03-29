@@ -5,7 +5,6 @@ import '../Model/model.dart';
 import '../providers/EmployeProvider.dart';
 
 class EmployDetails extends StatelessWidget {
- 
   const EmployDetails({super.key});
 
   @override
@@ -14,7 +13,7 @@ class EmployDetails extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Employee Details'),
       ),
-      body: FutureBuilder<Employee>(
+      body: FutureBuilder<Employee?>(
         future: Provider.of<EmployeeService>(context).getEmployeeById(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
