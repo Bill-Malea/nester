@@ -9,13 +9,18 @@ class LeavesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+    return Column(children: [
       FutureBuilder<List<Leave>>(
         future: Provider.of<LeaveService>(context).fetchLeaves(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Container(
+              padding: const EdgeInsets.only(top: 200),
+              child: const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 1,
+                ),
+              ),
             );
           } else if (snapshot.hasError) {
             return Center(
@@ -29,18 +34,18 @@ class LeavesPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final leave = leaves[index];
                 Color? backgroundColor;
-                if (leave.status == 'Pending') {
-                  backgroundColor = Colors.yellowAccent;
-                } else if (leave.status == 'Approved') {
+                if (leave.status == null) {
+                  backgroundColor = Colors.amber;
+                } else if (leave.status!.toLowerCase() == 'Approved') {
                   backgroundColor = Colors.greenAccent;
-                } else if (leave.status == 'Denied') {
+                } else if (leave.status!.toLowerCase() == 'Denied') {
                   backgroundColor = Colors.redAccent;
                 }
                 return Card(
                   color: backgroundColor,
                   child: ListTile(
-                    title: Text(leave.type),
-                    subtitle: Text(leave.status),
+                    title: Text(leave.reason),
+                    subtitle: Text(leave.status ?? 'Pending'),
                     trailing: const Icon(Icons.arrow_forward),
                     onTap: () {
                       // ignore: todo

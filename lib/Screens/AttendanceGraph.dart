@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:nester/providers/AttendenceProvider.dart';
+import 'package:provider/provider.dart';
 
 import '../Model/model.dart';
 
 // ignore: must_be_immutable
-class AttendanceGraph extends StatelessWidget {
+class AttendanceGraph extends StatefulWidget {
   AttendanceGraph({super.key});
-  List<AttendanceData> data = [
-    AttendanceData(date: DateTime(2022, 2, 28), timeDifference: 8),
-    AttendanceData(date: DateTime(2022, 3, 1), timeDifference: 6),
-    AttendanceData(date: DateTime(2022, 3, 2), timeDifference: 7),
-    AttendanceData(date: DateTime(2022, 3, 3), timeDifference: 6),
-    AttendanceData(date: DateTime(2022, 3, 4), timeDifference: 8),
-  ];
+
+  @override
+  State<AttendanceGraph> createState() => _AttendanceGraphState();
+}
+
+class _AttendanceGraphState extends State<AttendanceGraph> {
+  @override
+  void initState() {
+    Provider.of<AttendanceService>(context, listen: false).fetchAttendance();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<AttendanceData> data =
+        Provider.of<AttendanceService>(context).attendancedata;
     List<charts.Series<AttendanceData, DateTime>> seriesList = [
       charts.Series<AttendanceData, DateTime>(
         id: 'Attendance',
@@ -25,17 +34,28 @@ class AttendanceGraph extends StatelessWidget {
       )
     ];
 
-    return SizedBox(
-      height: 350,
-      child: charts.TimeSeriesChart(
-        seriesList,
-        animate: true,
-        defaultRenderer: charts.LineRendererConfig(
-          includeArea: true,
-          stacked: false,
-        ),
-        dateTimeFactory: const charts.LocalDateTimeFactory(),
-      ),
-    );
+    return data.isEmpty
+        ? Container(
+            padding: const EdgeInsets.only(top: 200),
+            child: const Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 1,
+              ),
+            ),
+          )
+        : Center(
+            child: SizedBox(
+              height: 350,
+              child: charts.TimeSeriesChart(
+                seriesList,
+                animate: true,
+                defaultRenderer: charts.LineRendererConfig(
+                  includeArea: true,
+                  stacked: false,
+                ),
+                dateTimeFactory: const charts.LocalDateTimeFactory(),
+              ),
+            ),
+          );
   }
 }

@@ -27,8 +27,9 @@ class EmployDetails extends StatelessWidget {
             );
           }
           final employee = snapshot.data!;
+          print(employee.department);
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ListTile(
                 title: Text(employee.name),

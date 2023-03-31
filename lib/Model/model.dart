@@ -1,4 +1,6 @@
 import 'package:faker/faker.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Employee {
   final String id;
@@ -37,24 +39,35 @@ class Employee {
   }
 }
 
+errortoast(String msg) {
+  Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0);
+}
+
 class Leave {
-  final String type;
-  final String status;
+  final String reason;
+  final String? status;
   final DateTime startDate;
   final DateTime endDate;
 
   Leave(
-      {required this.type,
+      {required this.reason,
       required this.status,
       required this.startDate,
       required this.endDate});
 
   factory Leave.fromJson(Map<String, dynamic> json) {
     return Leave(
-      type: json['type'],
+      reason: json['reason'],
       status: json['status'],
-      startDate: DateTime.parse(json['start_date']),
-      endDate: DateTime.parse(json['end_date']),
+      startDate: DateTime.parse(json['from']),
+      endDate: DateTime.parse(json['to']),
     );
   }
 }
@@ -92,9 +105,9 @@ class AttendanceData {
   final int timeDifference;
 
   AttendanceData({required this.date, required this.timeDifference});
-  factory AttendanceData.fromJson(Map<String, dynamic> json) {
-    final signout = DateTime.parse(json['sign_out_time']);
-    final signin = DateTime.parse(json['sign_in_time']);
+  factory AttendanceData.fromJson(json) {
+    final signout = DateTime.parse(json['checkout']);
+    final signin = DateTime.parse(json['checkin']);
 
     final difference = signout.difference(signin).inHours;
 

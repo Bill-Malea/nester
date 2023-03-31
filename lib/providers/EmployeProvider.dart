@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import '../Model/model.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,31 +12,20 @@ class EmployeeService extends ChangeNotifier {
 
   Future<Employee?> getEmployeeById() async {
     try {
-      final response = await http.get(Uri.parse('$apiUrl/Employees/$id'));
+      final response = await http.get(Uri.parse('$apiUrl/Employees/$id.json'));
+      final data = json.decode(response.body);
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        return Employee.fromJson(data);
+      if (response.statusCode == 200 && data != null) {
+        final json = data as Map<String, dynamic>;
+
+        for (var elem in json.values) {
+          print(elem);
+          return Employee.fromJson(elem);
+        }
       } else {
         return null;
       }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-    }
+    } catch (e) {}
     return null;
   }
 }
-// }
-// var data = {
-//   'id': '120200',
-//   'name': 'John Doe',
-//   'email': 'Johndoe@gmail.com',
-//   'phone': '0720000233',
-//   'department': 'Finance',
-//   'gender': 'Male',
-//   'joineDate': DateTime.now().toIso8601String(),
-//   'salary': '60,000',
-//   'role': 'Accountant',
-// };

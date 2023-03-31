@@ -13,11 +13,9 @@ class ResignPage extends StatefulWidget {
 
 class _ResignPageState extends State<ResignPage> {
   final _reasonController = TextEditingController();
-
+  var isloading = false;
   @override
   Widget build(BuildContext context) {
-    final resignService = Provider.of<ResignService>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Resign'),
@@ -50,32 +48,31 @@ class _ResignPageState extends State<ResignPage> {
               },
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                final reason = _reasonController.text.trim();
+            isloading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1,
+                    ),
+                  )
+                : ElevatedButton(
+                    onPressed: () async {
+                      final reason = _reasonController.text.trim();
 
-                if (reason.isNotEmpty) {
-                  try {
-                    await resignService.submitResignation(reason);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Resignation submitted successfully!'),
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                    Navigator.pop(context);
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(e.toString()),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                }
-              },
-              child: const Text('Submit Resignation'),
-            ),
+                      if (reason.isNotEmpty) {
+                        setState(() {
+                          isloading = true;
+                        });
+                        await Provider.of<ResignService>(context, listen: false)
+                            .submitResignation(reason, context)
+                            .whenComplete(() {
+                          setState(() {
+                            isloading = false;
+                          });
+                        });
+                      }
+                    },
+                    child: const Text('Submit Resignation'),
+                  ),
           ],
         ),
       ),

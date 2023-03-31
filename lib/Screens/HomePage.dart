@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../Model/model.dart';
+import '../providers/AttendenceProvider.dart';
 import '../providers/BottomNavProvider.dart';
 import 'AttendanceGraph.dart';
 import 'HomeScreen.dart';
 import 'LeavesList.dart';
-import 'ResignationStatus.dart';
+import 'GrievanceList.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -29,20 +30,38 @@ class _MyHomePageState extends State<MyHomePage> {
     Icons.person,
     Icons.book_online_sharp,
   ];
+  @override
+  void initState() {
+    Provider.of<AttendanceService>(context, listen: false).fetchcheckOut();
+    Provider.of<AttendanceService>(context, listen: false).fetchcheckIn();
+    super.initState();
+  }
 
   final List<Widget> _pages = <Widget>[
     HomeScreen(),
     const LeavesPage(),
     AttendanceGraph(),
-    ResignationPage(),
+    const GrievancesList(),
   ];
   @override
   Widget build(BuildContext context) {
     var selectedIndex = Provider.of<BottomNavProvider>(context).selectetab;
+
+    String getheader() {
+      if (selectedIndex == 0) {
+        return 'Nester';
+      } else if (selectedIndex == 1) {
+        return 'Leaves';
+      } else if (selectedIndex == 2) {
+        return 'Graph Attendance';
+      }
+      return 'Grievances Response';
+    }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(widget.title),
+        title: Text(getheader()),
         actions: [
           InkWell(
               onTap: () {
@@ -56,10 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ))
         ],
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: _pages.elementAt(selectedIndex),
-        ),
+      body: SingleChildScrollView(
+        child: _pages.elementAt(selectedIndex),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.secondary,

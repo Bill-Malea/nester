@@ -34,11 +34,12 @@ class _VoiceGrievancePageState extends State<VoiceGrievancePage> {
           description: _text,
         );
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Grievance submitted successfully'),
         ));
       } catch (error) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Error submitting grievance'),
         ));
       } finally {
@@ -64,7 +65,7 @@ class _VoiceGrievancePageState extends State<VoiceGrievancePage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Title'),
+                  decoration: const InputDecoration(labelText: 'Title'),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter a title';
@@ -104,7 +105,7 @@ class _VoiceGrievancePageState extends State<VoiceGrievancePage> {
                 ),
                 SizedBox(height: 16.0),
                 _isLoading
-                    ? Center(
+                    ? const Center(
                         child: CircularProgressIndicator(),
                       )
                     : ElevatedButton(

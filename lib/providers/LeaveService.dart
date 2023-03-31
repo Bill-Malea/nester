@@ -17,6 +17,7 @@ class LeaveService extends ChangeNotifier {
       final jsonList = jsonDecode(response.body) as Map<String, dynamic>;
       List<Leave> leaves = [];
       jsonList.forEach((key, value) {
+        print(jsonList);
         leaves.add(Leave.fromJson(value));
       });
 
@@ -26,18 +27,22 @@ class LeaveService extends ChangeNotifier {
     }
   }
 
-  Future<bool> applyLeave(
-      String type, DateTime from, DateTime to, String reason) async {
+  Future<bool> applyLeave(DateTime from, DateTime to, String reason) async {
     final url = Uri.parse('$apiUrl/Leave/$id.json');
     final response = await http.post(
       url,
       body: json.encode({
-        'type': type,
         'from': from.toIso8601String(),
         'to': to.toIso8601String(),
-        'reason': reason
+        'reason': reason,
+        'supportDoc':
+            'https://files.jotform.com/jotformapps/request-for-leave-6318d6094ebf84f0c1be89c44cfc41ad-classic.png'
       }),
     );
+    if (response.statusCode != 200) {
+      errortoast('Couldnt Send A Leave Request Try Again Later');
+      return false;
+    }
     return response.statusCode == 200;
   }
 }

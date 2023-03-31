@@ -23,6 +23,7 @@ class _AttendancePageState extends State<AttendancePage> {
   @override
   void dispose() {
     _controller?.dispose();
+
     super.dispose();
   }
 
@@ -40,87 +41,60 @@ class _AttendancePageState extends State<AttendancePage> {
   @override
   Widget build(BuildContext context) {
     final attendanceService = Provider.of<AttendanceService>(context);
-    final checkIns = attendanceService.checkIns;
-    final checkOuts = attendanceService.checkOuts;
-    final checkedIn = checkIns.isNotEmpty;
-    final checkedOut = checkOuts.isNotEmpty;
+
+    final checkedIn = Provider.of<AttendanceService>(context).checkedIn;
+    final checkedOut = Provider.of<AttendanceService>(context).checkedOut;
+    print(checkedIn);
+    print(checkedOut);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Attendance'),
       ),
       body: Column(
         children: [
-          Expanded(
-            flex: 3,
-            child: QRView(
-              key: _qrKey,
-              onQRViewCreated: _onQRViewCreated,
-            ),
-          ),
+          // Expanded(
+          //   flex: 3,
+          //   child: QRView(
+          //     key: _qrKey,
+          //     onQRViewCreated: _onQRViewCreated,
+          //   ),
+          // ),
           Expanded(
             flex: 1,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(_qrText),
-                SizedBox(height: 16.0),
-                if (!checkedIn && !checkedOut)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
+                const SizedBox(height: 16.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    if (!checkedIn)
                       ElevatedButton(
                         onPressed: () async {
-                          final dateTime = DateTime.parse(_qrText);
-                          try {
-                            await attendanceService.checkIn(dateTime);
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(e.toString()),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
+                          Provider.of<AttendanceService>(
+                            context,
+                            listen: false,
+                          ).checkIn();
                         },
-                        child: Text('Check In'),
+                        child: const Text('Check In'),
                       ),
+                    if (!checkedOut)
                       ElevatedButton(
                         onPressed: () async {
-                          final dateTime = DateTime.parse(_qrText);
-                          try {
-                            await attendanceService.checkOut(dateTime);
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(e.toString()),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
+                          Provider.of<AttendanceService>(
+                            context,
+                            listen: false,
+                          ).checkOut();
                         },
-                        child: Text('Check Out'),
+                        child: const Text('Check Out'),
                       ),
-                    ],
-                  ),
-                if (checkedIn && !checkedOut)
-                  ElevatedButton(
-                    onPressed: () async {
-                      final dateTime = DateTime.parse(_qrText);
-                      try {
-                        await attendanceService.checkOut(dateTime);
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(e.toString()),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                      }
-                    },
-                    child: Text('Check Out'),
-                  ),
+                  ],
+                ),
                 if (checkedIn && checkedOut)
-                  Text('You have already checked in and checked out today.'),
+                  const Center(
+                      child: Text(
+                          'You have already checked in and checked out today.')),
               ],
             ),
           ),
