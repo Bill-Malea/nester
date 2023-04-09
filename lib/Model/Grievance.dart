@@ -15,7 +15,7 @@ class Grievance {
 
   factory Grievance.fromJson(json) {
     return Grievance(
-      response: json['response'],
+      response: json['reply'],
       title: json['title'],
       description: json['description'],
       deparment: json['department'],

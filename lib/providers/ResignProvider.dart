@@ -16,10 +16,11 @@ class ResignService extends ChangeNotifier {
           await http.post(Uri.parse('$apiUrl/Resignation/$id.json'),
               body: jsonEncode({
                 'reason': reason,
-                'status': 'pending',
+                'status': null,
               }));
 
       if (response.statusCode != 200) {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Failed to submit resignation.'),

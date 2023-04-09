@@ -52,7 +52,7 @@ errortoast(String msg) {
 
 class Leave {
   final String reason;
-  final String? status;
+  final bool? status;
   final DateTime startDate;
   final DateTime endDate;
 
@@ -106,14 +106,17 @@ class AttendanceData {
 
   AttendanceData({required this.date, required this.timeDifference});
   factory AttendanceData.fromJson(json) {
-    final signout = DateTime.parse(json['checkout']);
-    final signin = DateTime.parse(json['checkin']);
+    var rawsignout = json['checkout'];
+    var rawin = json['checkin'];
+    var signout = DateTime.parse(rawsignout);
+    var signin = DateTime.parse(rawin);
 
-    final difference = signout.difference(signin).inHours;
+    var difference = signout.difference(signin).inHours;
 
     return AttendanceData(
       date: DateTime.parse(json['date']),
-      timeDifference: difference,
+      /////////// check to avoid graph distortion in the case where
+      timeDifference: difference <= 0 ? 0 : difference,
     );
   }
 }

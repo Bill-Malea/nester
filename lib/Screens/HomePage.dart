@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../Model/model.dart';
+import '../login.dart';
 import '../providers/AttendenceProvider.dart';
 import '../providers/BottomNavProvider.dart';
 import 'AttendanceGraph.dart';
@@ -58,6 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
       return 'Grievances Response';
     }
 
+    Future<LoginPage> signOut() async {
+      await FirebaseAuth.instance.signOut();
+
+      return const LoginPage();
+    }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -65,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
         actions: [
           InkWell(
               onTap: () {
-                auth.signOut();
+                signOut();
               },
               child: Container(
                 margin: const EdgeInsets.only(left: 10),

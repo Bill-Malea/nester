@@ -58,24 +58,42 @@ class _GrievancesListState extends State<GrievancesList> {
             itemCount: grievances.length,
             itemBuilder: (context, index) {
               final grievance = grievances[index];
-              return ListTile(
-                tileColor: grievance.response == null
-                    ? Colors.greenAccent
-                    : Colors.redAccent,
-                title: Text(grievance.title),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(grievance.description),
-                    const SizedBox(
-                      height: 10,
+              return Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: ListTile(
+                  tileColor: grievance.response == null
+                      ? Colors.amberAccent
+                      : Colors.greenAccent,
+                  title: Text(
+                    grievance.title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    grievance.response != null
-                        ? Text(' ${grievance.description}')
-                        : const SizedBox(),
-                  ],
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(grievance.description),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      grievance.response != null
+                          ? Text(
+                              ' ${grievance.response}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          : const SizedBox(),
+                    ],
+                  ),
+                  onTap: () => _showGrievanceDialog(grievance.response ?? ''),
                 ),
-                onTap: () => _showGrievanceDialog(grievance.response ?? ''),
               );
             },
           );

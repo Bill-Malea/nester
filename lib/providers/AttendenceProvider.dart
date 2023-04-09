@@ -96,15 +96,16 @@ class AttendanceService extends ChangeNotifier {
 
   Future<List<AttendanceData>> fetchAttendance() async {
     final response = await http.get(Uri.parse('$apiUrl/Attendance/$id.json'));
-
     List<AttendanceData> rawdata = [];
     final jsonList = jsonDecode(response.body);
     if (response.statusCode == 200 && jsonList != null) {
       final data = jsonList as Map<String, dynamic>;
-
       data.forEach((key, value) {
-        rawdata.add(AttendanceData.fromJson(value));
+        if (value['checkout'] != null) {
+          rawdata.add(AttendanceData.fromJson(value));
+        }
       });
+      rawdata.sort((a, b) => b.date.compareTo(a.date));
       _attendancedata = rawdata;
       notifyListeners();
       return rawdata;

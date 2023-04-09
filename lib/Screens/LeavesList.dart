@@ -9,6 +9,15 @@ class LeavesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String tittle(bool? status) {
+      if (status == null) {
+        return 'Pending';
+      } else if (status == true) {
+        return 'Approved';
+      }
+      return 'Denied';
+    }
+
     return Column(children: [
       FutureBuilder<List<Leave>>(
         future: Provider.of<LeaveService>(context).fetchLeaves(),
@@ -36,16 +45,16 @@ class LeavesPage extends StatelessWidget {
                 Color? backgroundColor;
                 if (leave.status == null) {
                   backgroundColor = Colors.amber;
-                } else if (leave.status!.toLowerCase() == 'Approved') {
+                } else if (leave.status == true) {
                   backgroundColor = Colors.greenAccent;
-                } else if (leave.status!.toLowerCase() == 'Denied') {
+                } else if (leave.status == false) {
                   backgroundColor = Colors.redAccent;
                 }
                 return Card(
                   color: backgroundColor,
                   child: ListTile(
                     title: Text(leave.reason),
-                    subtitle: Text(leave.status ?? 'Pending'),
+                    subtitle: Text(tittle(leave.status)),
                     trailing: const Icon(Icons.arrow_forward),
                     onTap: () {
                       // ignore: todo

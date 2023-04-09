@@ -36,10 +36,12 @@ class _VoiceGrievancePageState extends State<VoiceGrievancePage> {
 
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.green,
           content: Text('Grievance submitted successfully'),
         ));
       } catch (error) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.red,
           content: Text('Error submitting grievance'),
         ));
       } finally {

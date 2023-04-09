@@ -27,7 +27,7 @@ class _AttendanceGraphState extends State<AttendanceGraph> {
     List<charts.Series<AttendanceData, DateTime>> seriesList = [
       charts.Series<AttendanceData, DateTime>(
         id: 'Attendance',
-        colorFn: (_, __) => charts.MaterialPalette.black.lighter,
+        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
         domainFn: (AttendanceData attendance, _) => attendance.date,
         measureFn: (AttendanceData attendance, _) => attendance.timeDifference,
         data: data,

@@ -17,7 +17,6 @@ class LeaveService extends ChangeNotifier {
       final jsonList = jsonDecode(response.body) as Map<String, dynamic>;
       List<Leave> leaves = [];
       jsonList.forEach((key, value) {
-        print(jsonList);
         leaves.add(Leave.fromJson(value));
       });
 
