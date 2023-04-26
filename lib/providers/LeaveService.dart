@@ -9,12 +9,12 @@ import 'package:nester/Model/model.dart';
 class LeaveService extends ChangeNotifier {
   final id = FirebaseAuth.instance.currentUser!.uid;
   final String apiUrl = "https://nester-fee8e-default-rtdb.firebaseio.com";
-  final faker = Faker();
+
   Future<List<Leave>> fetchLeaves() async {
     final response = await http.get(Uri.parse('$apiUrl/Leave/$id.json'));
-
-    if (response.statusCode == 200) {
-      final jsonList = jsonDecode(response.body) as Map<String, dynamic>;
+    var data = jsonDecode(response.body);
+    if (response.statusCode == 200 && data != null) {
+      final jsonList = data as Map<String, dynamic>;
       List<Leave> leaves = [];
       jsonList.forEach((key, value) {
         leaves.add(Leave.fromJson(value));
@@ -22,7 +22,7 @@ class LeaveService extends ChangeNotifier {
 
       return leaves;
     } else {
-      throw Exception('Failed to fetch leaves');
+      throw Exception('No applied leaves Yet');
     }
   }
 
