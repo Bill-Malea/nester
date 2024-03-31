@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 
 class ResignService extends ChangeNotifier {
   final id = FirebaseAuth.instance.currentUser!.uid;
-  final String apiUrl = 'https://nester-fee8e-default-rtdb.firebaseio.com';
+  final String apiUrl =
+      'https://employee-management-syst-29f9f-default-rtdb.firebaseio.com';
   String _resignstatus = '';
 
   String get resignstatus => _resignstatus;

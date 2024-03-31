@@ -20,7 +20,8 @@ class AttendanceService extends ChangeNotifier {
     return year + month + day;
   }
 
-  final apiUrl = 'https://nester-fee8e-default-rtdb.firebaseio.com';
+  final apiUrl =
+      'https://employee-management-syst-29f9f-default-rtdb.firebaseio.com';
   Future<void> checkIn() async {
     final datetoday = date();
     final now = DateTime.now().toIso8601String();

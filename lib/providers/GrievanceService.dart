@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import '../Model/Grievance.dart';
 
 class GrievanceService extends ChangeNotifier {
-  final String apiUrl = "https://nester-fee8e-default-rtdb.firebaseio.com";
+  final String apiUrl = "https://employee-management-syst-29f9f-default-rtdb.firebaseio.com";
   final id = FirebaseAuth.instance.currentUser!.uid;
   List<Grievance> _grievances = [];
   List<Grievance> get grievances => [..._grievances];
